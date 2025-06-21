@@ -232,13 +232,44 @@ GET /
 - **Export Features**: CSV/JSON/Excel exports of individual tables.
 - **Plugin Architecture**: Let users register new table‑title patterns via configuration files.
 
-## Missed Edge Cases
 
-- **Very Large Files**: Handling files >10 MB might require streaming instead of full in‑memory reads.
-- **Corrupted or Encrypted Files**: Gracefully reject unreadable workbooks.
-- **Deeply Nested Merged Cells**: Complex merges may still fragment tables.
-- **International Locales**: Non‑ASCII titles or regional decimal separators ("," vs. ".").
-- **Dynamic Table Names**: Titles that change slightly across files (e.g. extra whitespace).
+## Missed Edge Cases & Examples
+
+- **Entirely Blank Workbook**  
+  *Scenario*: You upload a `.xlsx` with no filled cells.  
+  *Expected Behavior*: API returns HTTP 400 "No tables found in the uploaded Excel file."
+
+- **Tables with Zero Numeric Cells**  
+  *Scenario*: A "COST BREAKDOWN" table where every cell is text ("High", "Medium", "Low").  
+  *Expected Behavior*: Calling `/row_sum?table_name=COST BREAKDOWN&row_name=High` returns `{ "sum": 0.0 }` rather than an error.
+
+- **Malformed or Partially Matching Titles**  
+  *Scenario*: The sheet contains "INIITAL INVESTMENT" (typo) instead of "INITIAL INVESTMENT".  
+  *Expected Behavior*: No table is extracted for that header, and `/list_tables` simply omits it; requests for that name return 404.
+
+- **Merged Cells Spanning Multiple Columns**  
+  *Scenario*: "OPERATING CASHFLOWS" header is a merged cell across A1:C1, with data beneath.  
+  *Expected Behavior*: The extractor treats the merged region as one column labeled "OPERATING CASHFLOWS", not three separate empty columns.
+
+- **Hidden Rows/Columns**  
+  *Scenario*: Row 3 (a header) or Column D (data) is hidden in Excel.  
+  *Expected Behavior*: Decide whether hidden rows should be ignored or included; currently they're treated like any other cell, which may be surprising.
+
+- **Locale‑Specific Number Formats**  
+  *Scenario*: German locale entries like "1 234,56" (space thousands, comma decimal).  
+  *Expected Behavior*: Our `float()` conversions fail; we'd need to pre‑process or specify locale to parse correctly.
+
+- **Cells Containing Formulas**  
+  *Scenario*: A cell holds `=SUM(B2:B5)` instead of the computed result.  
+  *Expected Behavior*: Pandas reads the literal formula text; sums should instead use the evaluated numeric result.
+
+- **Multiple Sheets with Identical Titles**  
+  *Scenario*: Both Sheet1 and Sheet2 include a table called "INITIAL INVESTMENT."  
+  *Expected Behavior*: Without sheet‑scoping, one will overwrite the other; optionally prefix table names with sheet names.
+
+- **Highly Irregular Layouts**  
+  *Scenario*: A table where 50% of rows and 50% of columns are blank (visual spacing).  
+  *Expected Behavior*: With our 60% threshold it survives; if the threshold changes it could be dropped unintentionally.
 
 ## 📦 Dependencies
 
