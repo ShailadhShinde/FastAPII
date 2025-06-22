@@ -281,6 +281,21 @@ GET /
 
 ---
 
+## 📋 API Endpoints (Quick Reference)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Health check |
+| POST | `/upload_excel` | Upload an Excel file |
+| GET | `/list_tables` | List all extracted table names |
+| GET | `/get_table_details?table_name=...` | Retrieve row labels for a table |
+| GET | `/row_sum?table_name=...&row_name=...` | Sum numeric values in a row |
+| GET | `/debug_table?table_name=...` | Get metadata & preview for a table |
+
+👉 For full request formats and sample responses, see Postman Collection.
+
+
+
 
 ## Potential Improvements
 
