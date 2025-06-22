@@ -335,10 +335,70 @@ GET /
 
 ## 📬 Postman Collection
 
-You can import our Postman collection to quickly test all endpoints:
+**Base URL:** `http://localhost:9090`
 
-- File: [`postman_collection.json`](./postman_collection.json)
-- Contains requests for Health Check, Upload Excel, List Tables, Get Table Details, Calculate Row Sum, and Debug Table.
+---
+
+## 1. Health Check
+- **Method:** `GET`
+- **Endpoint:** `/`
+- **Description:** Ping the API root to verify service availability.
+- **Headers:**
+  - `Accept: application/json`
+
+---
+
+## 2. Upload Excel
+- **Method:** `POST`
+- **Endpoint:** `/upload_excel`
+- **Description:** Upload and process an Excel file.
+- **Headers:**
+  - `Content-Type: multipart/form-data`
+- **Body (form-data):**
+  - `file` → *(File upload)* e.g. `sample.xlsx`
+
+---
+
+## 3. List Tables
+- **Method:** `GET`
+- **Endpoint:** `/list_tables`
+- **Description:** Get a list of all extracted table names.
+- **Headers:**
+  - `Accept: application/json`
+
+---
+
+## 4. Get Table Details
+- **Method:** `GET`
+- **Endpoint:** `/get_table_details`
+- **Query Params:**
+  - `table_name = INITIAL INVESTMENT`
+- **Description:** Retrieve row names for the specified table.
+- **Headers:**
+  - `Accept: application/json`
+
+---
+
+## 5. Row Sum
+- **Method:** `GET`
+- **Endpoint:** `/row_sum`
+- **Query Params:**
+  - `table_name = INITIAL INVESTMENT`
+  - `row_name = Tax Credit (if any )=`
+- **Description:** Calculate the numeric sum of a specified row.
+- **Headers:**
+  - `Accept: application/json`
+
+---
+
+## 6. Debug Table
+- **Method:** `GET`
+- **Endpoint:** `/debug_table`
+- **Query Params:**
+  - `table_name = DISCOUNT RATE`
+- **Description:** Return metadata and a preview of a specified table.
+- **Headers:**
+  - `Accept: application/json`
 
 
 ## 📦 Dependencies
