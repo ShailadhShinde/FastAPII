@@ -334,14 +334,34 @@ GET /
 
 ## 📦 Dependencies
 
+
+## 📦 Dependencies
+
 ```txt
+annotated-types==0.7.0
+anyio==4.9.0
+click==8.2.1
+colorama==0.4.6
+et_xmlfile==2.0.0
 fastapi==0.115.13
-uvicorn==0.34.3
-pandas==2.3.0
+h11==0.16.0
+idna==3.10
+numpy==2.3.0
 openpyxl==3.1.5
-xlrd==2.0.2
+pandas==2.3.0
 pydantic==2.11.7
+pydantic_core==2.33.2
+python-dateutil==2.9.0.post0
 python-multipart==0.0.20
+pytz==2025.2
+six==1.17.0
+sniffio==1.3.1
+starlette==0.46.2
+typing-inspection==0.4.1
+typing_extensions==4.14.0
+tzdata==2025.2
+uvicorn==0.34.3
+xlrd==2.0.2
 ```
 
 ## 🚀 Deployment
