@@ -313,4 +313,47 @@ xlrd==2.0.2
 ```
 
 
+---
+
+## 🛠️ Environment Setup & Project Structure
+
+> 📁 **Folder Setup**  
+> Download or clone the project into a folder named **`Excel`** (capital `E` is recommended for consistency):
+
+```bash
+git clone https://your-repo-link.git
+mv your-folder Excel  # if needed
+cd Excel
+```
+
+> 🐍 **Create Virtual Environment**
+
+```bash
+python -m venv venv
+source venv/bin/activate    # on Linux/macOS
+venv\Scripts\activate     # on Windows
+```
+
+> 📦 **Install Dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+> 🔐 **Environment Variables**
+
+Create a `.env` file and add the following if applicable:
+
+```env
+EXCEL_UPLOAD_DIR=./uploads
+DEBUG=True
+```
+
+> 🚀 **Run the API**
+
+```bash
+uvicorn main:app --host 0.0.0.0 --port 9090
+```
+
+
 
