@@ -350,6 +350,3 @@ python-multipart==0.0.20
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 9090 --workers 4
 ```
-
-### Docker
-*Docker configuration to be added*
