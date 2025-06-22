@@ -291,6 +291,7 @@ GET /
 - **UI Dashboard**: Build a simple React/Vue frontend to upload files and display tables visually.
 - **Export Features**: CSV/JSON/Excel exports of individual tables.
 - **Plugin Architecture**: Let users register new table‑title patterns via configuration files.
+- **Adaptive Pattern Learning** : If provided with a larger corpus of Excel files, develop robust, data-driven logic (e.g., machine learning or adaptive heuristics) to automatically identify and generalize table patterns across varied layouts.
 
 
 ## Missed Edge Cases & Examples
