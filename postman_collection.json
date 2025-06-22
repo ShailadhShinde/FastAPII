@@ -1,0 +1,181 @@
+{
+  "info": {
+    "name": "Excel Processor API",
+    "description": "Structured and minimal Postman collection for testing endpoints",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:9090",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        },
+        "description": "Ping the API root to verify service availability."
+      }
+    },
+    {
+      "name": "Upload Excel",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "multipart/form-data"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "sample.xlsx"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/upload_excel",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "upload_excel"
+          ]
+        },
+        "description": "Upload and process an Excel file."
+      }
+    },
+    {
+      "name": "List Tables",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/list_tables",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "list_tables"
+          ]
+        },
+        "description": "Get a list of all extracted table names."
+      }
+    },
+    {
+      "name": "Get Table Details",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/get_table_details?table_name=INITIAL INVESTMENT",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "get_table_details"
+          ],
+          "query": [
+            {
+              "key": "table_name",
+              "value": "INITIAL INVESTMENT"
+            }
+          ]
+        },
+        "description": "Retrieve row names for the specified table."
+      }
+    },
+    {
+      "name": "Row Sum",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/row_sum?table_name=INITIAL INVESTMENT&row_name=Tax Credit (if any )=",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "row_sum"
+          ],
+          "query": [
+            {
+              "key": "table_name",
+              "value": "INITIAL INVESTMENT"
+            },
+            {
+              "key": "row_name",
+              "value": "Tax Credit (if any )="
+            }
+          ]
+        },
+        "description": "Calculate the numeric sum of a specified row."
+      }
+    },
+    {
+      "name": "Debug Table",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/debug_table?table_name=DISCOUNT RATE",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "debug_table"
+          ],
+          "query": [
+            {
+              "key": "table_name",
+              "value": "DISCOUNT RATE"
+            }
+          ]
+        },
+        "description": "Return metadata and a preview of a specified table."
+      }
+    }
+  ]
+}
