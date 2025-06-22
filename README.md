@@ -332,7 +332,14 @@ GET /
   *Scenario*: A table where 50% of rows and 50% of columns are blank (visual spacing).  
   *Expected Behavior*: With our 60% threshold it survives; if the threshold changes it could be dropped unintentionally.
 
-## 📦 Dependencies
+
+## 📬 Postman Collection
+
+You can import our Postman collection to quickly test all endpoints:
+
+- File: [`postman_collection.json`](./postman_collection.json)
+- Contains requests for Health Check, Upload Excel, List Tables, Get Table Details, Calculate Row Sum, and Debug Table.
+
 
 
 ## 📦 Dependencies
