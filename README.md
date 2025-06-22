@@ -292,7 +292,7 @@ GET /
 | GET | `/row_sum?table_name=...&row_name=...` | Sum numeric values in a row |
 | GET | `/debug_table?table_name=...` | Get metadata & preview for a table |
 
-👉 For full request formats and sample responses, see Postman Collection.
+🔗 **See [📬 Postman Collection](#-postman-collection)** for full request/response examples and importable files.
 
 
 
@@ -348,7 +348,7 @@ GET /
   *Expected Behavior*: With our 60% threshold it survives; if the threshold changes it could be dropped unintentionally.
 
 
-## 📬 Postman Collection
+## 📬 Postman Collection 
 
 **Base URL:** `http://localhost:9090`
 
@@ -445,9 +445,5 @@ uvicorn==0.34.3
 xlrd==2.0.2
 ```
 
-## 🚀 Deployment
 
-### Production
-```bash
-uvicorn main:app --host 0.0.0.0 --port 9090 --workers 4
-```
+
