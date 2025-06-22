@@ -1,25 +1,32 @@
-# Excel Processor API
-
 ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115.13-green)
-![License](https://img.shields.io/badge/license-MIT-yellow)
 
-A FastAPI‑based web service for processing Excel files and extracting structured table data based on predefined table titles.
+
+
+# Excel Processor API
+
+&#x20;&#x20;
+
+A FastAPI–based web service for processing Excel files and extracting structured table data based on predefined table titles.
 
 ## 🚀 Overview
 
-This application processes Excel files (`.xls`/`.xlsx`) and extracts tables using a **title‑anchored boundary detection** algorithm. It solves common table extraction challenges like fragmentation, sparse data handling, and irregular layouts. The API supports file uploads, table listing, table details retrieval, and row calculations.
+This application processes Excel files (`.xls`/`.xlsx`) and extracts tables using a **title‑anchored boundary detection** algorithm. It solves common table extraction challenges like fragmentation, sparse data handling, and irregular layouts. The API supports file uploads, table listing, table details retrieval, row calculations–and now debug metadata retrieval.
 
 ## ✨ Features
 
-- **Intelligent Table Extraction**: Anchor‑based detection with boundary calculation  
-- **Multi‑Engine Support**: Handles both `.xls` and `.xlsx` formats  
-- **Fragmentation Prevention**: Horizontal segmentation & overlap tracking  
-- **Advanced Data Cleaning**: Configurable thresholds for empty rows/columns  
-- **Duplicate Handling**: Automatic disambiguation of duplicate table titles  
-- **Row Calculations**: Numeric sum calculations with robust error handling  
-- **API Documentation**: Auto‑generated OpenAPI/Swagger docs  
-- **File Validation**: Size limits, format validation, and content verification  
+- **Intelligent Table Extraction**: Anchor-based detection with boundary calculation (implemented in `utils.locate_table_titles`, `calculate_row_boundaries`, `determine_horizontal_boundaries`)
+- **Multi-Engine Support**: Handles both `.xls` and `.xlsx` formats (`pandas.read_excel` uses `engine="xlrd"` and built-in support for `.xlsx`)
+- **Fragmentation Prevention**: Horizontal segmentation & overlap tracking (see `utils.find_tables_in_spreadsheet`, `already_used` grid)
+- **Advanced Data Cleaning**: Configurable thresholds for empty rows/columns (`utils.filter_rows_columns`, default 0.6 ratios)
+- **Duplicate Handling**: Automatic disambiguation of duplicate table titles (`utils.find_tables_in_spreadsheet` title\_counts logic)
+- **Row Calculations**: Numeric sum calculations with robust error handling (`main.row_sum` iterates with `float()` and skips non-numeric)
+- **Flexible Name Matching**: Exact, case-insensitive, and partial table/row name lookups, with suggestion lists on 404 errors (`main.find_table_name` & `main.find_row_name`)
+- **Consistent Error Responses**: Custom HTTP exception handler returning structured JSON `{ "error": "..." }` (`main.http_error_handler`)
+- **Debug Metadata Endpoint**: Inspect matching details and raw table slices for troubleshooting (`/debug_table` in `main.py`)
+- **Health Check Endpoint**: Simple `/` ping returning status and message (`main.app.get('/')`)
+- **API Documentation**: Auto-generated OpenAPI/Swagger docs (FastAPI default, available at `/docs`)
+- **File Validation**: Size limits, format validation, and content verification (`main.upload_excel` checks extension and handles errors)
 
 ## 📊 Supported Table Titles
 
@@ -139,45 +146,89 @@ Provide a sheet where a title is misspelled → ensure that block is not extract
 #### Merged‑Cell Test
 Use merged header/data cells → verify they appear as single string entries, not split or dropped.
 
+
 ## 📋 API Endpoints
 
 ### 1. Upload Excel File
+
 ```http
 POST /upload_excel
 ```
+
 **Functionality**: Upload and process an Excel file to extract tables.
 
 **Request**:
-- Content‑Type: multipart/form-data
+
+- `Content-Type`: multipart/form-data
 - Body: file field named `file`
 
 **Response**:
+
 ```json
 {
   "tables": ["INITIAL INVESTMENT", "CASHFLOW DETAILS", "DISCOUNT RATE"]
 }
 ```
 
-### 2. List Tables
+---
+
+### 2. Debug Table
+
+```http
+GET /debug_table?table_name=YOUR_TABLE_NAME
+```
+
+**Functionality**: Returns raw metadata about a specific table, including match details and a preview of its data.
+
+**Query Parameters**:
+
+- `table_name` (string, required): The (partial or case‑insensitive) table name to debug.
+
+**Response**:
+
+```json
+{
+  "requested_name": "discount rate",
+  "actual_table_name": "DISCOUNT RATE",
+  "num_rows": 12,
+  "num_cols": 4,
+  "first_5_rows": [
+    ["DISCOUNT RATE", "", "", ""],
+    ["Year", "0", "1", "2"],
+    ...
+  ],
+  "all_first_cells": ["DISCOUNT RATE", "Year", ...]
+}
+```
+
+---
+
+### 3. List Tables
+
 ```http
 GET /list_tables
 ```
+
 **Functionality**: List all extracted table names.
 
 **Response**:
+
 ```json
 {
   "tables": ["INITIAL INVESTMENT", "CASHFLOW DETAILS", "DISCOUNT RATE"]
 }
 ```
 
-### 3. Get Table Details
+### 4. Get Table Details
+
 ```http
 GET /get_table_details?table_name=INITIAL%20INVESTMENT
 ```
+
 **Functionality**: Return the row labels (first‑column values) for the specified table.
 
 **Response**:
+
 ```json
 {
   "table_name": "INITIAL INVESTMENT",
@@ -193,13 +244,16 @@ GET /get_table_details?table_name=INITIAL%20INVESTMENT
 }
 ```
 
-### 4. Calculate Row Sum
+### 5. Calculate Row Sum
+
 ```http
 GET /row_sum?table_name=INITIAL%20INVESTMENT&row_name=Tax%20Credit%20(if%20any%20)%3D
 ```
+
 **Functionality**: Sum all numeric values in the given row (ignoring non‑numeric cells).
 
 **Response**:
+
 ```json
 {
   "table_name": "INITIAL INVESTMENT",
@@ -208,19 +262,25 @@ GET /row_sum?table_name=INITIAL%20INVESTMENT&row_name=Tax%20Credit%20(if%20any%2
 }
 ```
 
-### 5. Health Check
+### 6. Health Check
+
 ```http
 GET /
 ```
+
 **Functionality**: Verify the API is running.
 
 **Response**:
+
 ```json
 {
   "message": "Excel Processor API is running",
   "status": "ok"
 }
 ```
+
+---
+
 
 ## Potential Improvements
 
